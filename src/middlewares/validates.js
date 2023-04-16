@@ -21,8 +21,23 @@ const validateProduct = ((req = request, res = response, next)=>{
     next(); 
 });
 
+const validateUUID = ((req = request, res = response, next)=>{
+     const regExpUUID = new RegExp("[a-zA-z0-9\-]{36}", "g");
+     const { uuid = null } = req.body;
+
+    if( uuid == undefined ){
+        return res.status(406).json({"error":"UUID missed!"});
+    }
+
+    if(!regExpUUID.test(uuid)){
+        return res.status(406).json({"error":"UUID is not a valid!"});
+    }
+
+    next();
+});
 
 
 
 
-export{validateProduct}
+
+export{validateProduct, validateUUID}

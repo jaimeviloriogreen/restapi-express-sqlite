@@ -1,5 +1,5 @@
 import { request, response } from "express";
-import { getProducts, insertProduct } from "../connections/store.js";
+import { getProducts, insertProduct, deleteProduct } from "../connections/store.js";
 import { createDB } from "../connections/database.js";
 import Product from "../models/Product.js";
 
@@ -22,14 +22,31 @@ const insertProducts = async (req = request, res = response)=>{
 
         const product = new Product(name, Number.parseFloat(price), Number.parseInt(qty));
 
-        const insertedId = await insertProduct(db, product);
+        const insertedUUID = await insertProduct(db, product);
         console.log();
         
-        res.status(200).json({"msg":"One product have been inserted!", insertedId});
+        res.status(200).json({"msg":"One product have been inserted!", insertedUUID});
     } catch (error) {
         console.log({error});
     }
 }
 
+const deleteOneProduct = async (req = request, res = response)=>{
+    try {
+        const { uuid } = req.body;
+        const db = await createDB("./src/database/store.db");
+        const deleted = await deleteProduct(db, uuid);
+        
+       if( deleted > 0 ){
+            return res.json({"msg":"One product have been deleted", deletedUUID: uuid})
+       };
 
-export{getAllProducts, insertProducts}
+       return res.json({"msg":`Nothing have been deleted!`})
+      
+    } catch (error) {
+         console.log({error});
+    }
+}
+
+
+export{getAllProducts, insertProducts, deleteOneProduct}

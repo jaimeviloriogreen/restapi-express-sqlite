@@ -10,7 +10,6 @@ const getProducts = (db)=>{
     });
 }
 
-
 const insertProduct = (db, product)=>{
     return new Promise((resolve, reject)=>{
         const {uuid, name, price, qty} = product;
@@ -18,13 +17,27 @@ const insertProduct = (db, product)=>{
         const sql = "INSERT INTO products(uuid, name, price, qty) VALUES(?,?,?,?)";
         const values = [uuid, name, price, qty];
 
-        db.run(sql, values, function(err){
+        db.run(sql, values, (err)=>{
             if( err ) return reject(err.message);
-            resolve(this.lastID);
+            resolve(uuid);
         });
 
         db.close()
     });
 }
 
-export{getProducts, insertProduct}
+const deleteProduct = (db, uuid)=>{
+    return new Promise((resolve, reject)=>{
+        const sql = "DELETE FROM products WHERE uuid = $id";
+        const id = { $id : uuid }
+
+        db.run(sql, id, function(err){
+            if( err ) return reject(err.message);
+            resolve(this.changes);
+        });
+
+         db.close();
+    });
+}
+
+export{getProducts, insertProduct, deleteProduct}
