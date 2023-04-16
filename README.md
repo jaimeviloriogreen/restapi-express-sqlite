@@ -2,10 +2,10 @@
 
 ### Installation
 First, you should have installed Node (obviously), the latest version, and pnpm, then run this command:
-`pnpm install`
++ `pnpm install`
 
 And later:
-`pnpm run sever`
++ `pnpm run server`
 
 ### Endpoints
 |Method|Endpoint|Description|Expected values|
