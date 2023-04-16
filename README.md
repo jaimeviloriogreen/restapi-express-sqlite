@@ -1,4 +1,4 @@
-# Resta API with Express & SQLite
+# Rest API with Express & SQLite
 
 ### Installation
 First, you should have installed Node (obviously), the latest version, and pnpm, then run this command:
