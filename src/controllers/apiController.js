@@ -1,5 +1,10 @@
 import { request, response } from "express";
-import { getProducts, insertProduct, deleteProduct } from "../connections/store.js";
+import { 
+    getProducts, 
+    insertProduct, 
+    deleteProduct , 
+    updateProduct
+} from "../connections/store.js";
 import { createDB } from "../connections/database.js";
 import Product from "../models/Product.js";
 
@@ -49,4 +54,22 @@ const deleteOneProduct = async (req = request, res = response)=>{
 }
 
 
-export{getAllProducts, insertProducts, deleteOneProduct}
+const updateOneProduct = async(req = request, res = response)=>{
+    try {
+        const product = req.body;
+    
+        const db = await createDB("./src/database/store.db");
+        const updated = await updateProduct(db, product);
+
+        if( updated > 0 ){
+            return res.json({"msg":"One product have been updated!", updatedUUID: product.uuid})
+       };
+
+       return res.json({"msg":`Nothing have been updated!`})
+        
+    } catch (error) {
+        console.log({error});
+    }
+}
+
+export{getAllProducts, insertProducts, deleteOneProduct, updateOneProduct}

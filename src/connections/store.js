@@ -40,4 +40,28 @@ const deleteProduct = (db, uuid)=>{
     });
 }
 
-export{getProducts, insertProduct, deleteProduct}
+const updateProduct = async(db, product)=>{
+    return new Promise((resolve, reject)=>{
+        
+        const { name, price, qty, uuid } = product;
+
+        let setValues = "";
+        let values = [];
+
+        if ( name ) setValues+= "name = ?, ", values.push(name);
+        if ( price ) setValues+= "price = ?, ", values.push( Number.parseFloat(price) );
+        if ( qty ) setValues+= "qty = ?, ", values.push( Number.parseInt(qty) );
+        
+
+        values.push(uuid);
+
+        const sql = `UPDATE products SET ${setValues.slice(0, -2)} WHERE uuid = ?`;
+        
+        db.run(sql, values, function(err){
+            if( err ) return reject(err.message);
+            resolve(this.changes);
+        });
+    });
+}
+
+export{getProducts, insertProduct, deleteProduct, updateProduct}
